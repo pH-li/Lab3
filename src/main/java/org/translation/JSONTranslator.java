@@ -4,8 +4,13 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,10 +20,7 @@ import org.json.JSONObject;
  * data from a JSON file. The data is read in once each time an instance of this class is constructed.
  */
 public class JSONTranslator implements Translator {
-
-    // TODO Task: pick appropriate instance variables for this class
     private Map<String, Map<String, String>> map;
-
 
     /**
      * Constructs a JSONTranslator using data from the sample.json resources file.
@@ -46,10 +48,10 @@ public class JSONTranslator implements Translator {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 Map<String, String> languageMap = new HashMap<>();
                 Iterator<String> keys = jsonObject.keys();
-                while(keys.hasNext()) {
+                while (keys.hasNext()) {
                     String key = keys.next();
-                    if (!Objects.equals(key, "id") && !Objects.equals(key, "alpha2") &&
-                            !Objects.equals(key, "alpha3")) {
+                    if (!Objects.equals(key, "id") && !Objects.equals(key, "alpha2")
+                            && !Objects.equals(key, "alpha3")) {
                         languageMap.put(key, jsonObject.getString(key));
                     }
                 }
