@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,9 +13,8 @@ import java.util.Map;
  * This class provides the service of converting country codes to their names.
  */
 public class CountryCodeConverter {
-    private Map<String, String> countryAlpha2Codes;
-    private Map<String, String> countryAlpha3Codes;
-    private Map<Integer, String> countryNumericCode;
+    private Map<String, String> countryToCode;
+    private Map<String, String> codeToCountry;
 
     /**
      * Default constructor which will load the country codes from "country-codes.txt"
@@ -32,17 +32,19 @@ public class CountryCodeConverter {
     public CountryCodeConverter(String filename) {
 
         try {
+            countryToCode = new HashMap<>();
+            codeToCountry = new HashMap<>();
+
             List<String> lines = Files.readAllLines(Paths.get(getClass()
                     .getClassLoader().getResource(filename).toURI()));
 
-            countryAlpha2Codes = new HashMap<>();
-            countryAlpha3Codes = new HashMap<>();
-            countryNumericCode = new HashMap<>();
-            for (String line : lines) {
-                String[] split = line.split(",");
-                countryAlpha2Codes.put(split[1], split[0]);
-                countryAlpha3Codes.put(split[2], split[0]);
-                countryNumericCode.put(Integer.parseInt(split[3]), split[0]);
+            Iterator<String> line = lines.iterator();
+            line.next();
+
+            while (line.hasNext()) {
+                String[] split = line.next().split("\t");
+                countryToCode.put(split[0], split[2]);
+                codeToCountry.put(split[2], split[0]);
             }
 
         }
@@ -58,7 +60,7 @@ public class CountryCodeConverter {
      * @return the name of the country corresponding to the code
      */
     public String fromCountryCode(String code) {
-        return this.countryAlpha3Codes.get(code);
+        return codeToCountry.get(code.toUpperCase());
     }
 
     /**
@@ -67,12 +69,7 @@ public class CountryCodeConverter {
      * @return the 3-letter code of the country
      */
     public String fromCountry(String country) {
-        for (String i : this.countryAlpha3Codes.keySet()) {
-            if (this.countryAlpha3Codes.get(i).equals(country)) {
-                return this.countryAlpha3Codes.get(i);
-            }
-        }
-        return "";
+        return countryToCode.get(country);
     }
 
     /**
@@ -80,6 +77,6 @@ public class CountryCodeConverter {
      * @return how many countries are included in this code converter.
      */
     public int getNumCountries() {
-        return countryNumericCode.size();
+        return countryToCode.size();
     }
 }
