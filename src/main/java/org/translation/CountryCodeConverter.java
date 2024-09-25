@@ -60,6 +60,9 @@ public class CountryCodeConverter {
      * @return the name of the country corresponding to the code
      */
     public String fromCountryCode(String code) {
+        if (code == null){
+            return null;
+        }
         return codeToCountry.get(code.toUpperCase());
     }
 
