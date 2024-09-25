@@ -66,7 +66,7 @@ public class JSONTranslator implements Translator {
 
     @Override
     public List<String> getCountryLanguages(String country) {
-        if (country == null){
+        if (country == null) {
             return new ArrayList<>();
         }
         Map<String, String> languageMap = map.get(country.toLowerCase());
@@ -82,7 +82,7 @@ public class JSONTranslator implements Translator {
 
     @Override
     public String translate(String country, String language) {
-        if (country == null){
+        if (country == null) {
             return null;
         }
         Map<String, String> languageMap = map.get(country.toLowerCase());
